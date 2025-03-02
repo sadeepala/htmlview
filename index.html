@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online HTML Viewer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark {
+            background-color: #333;
+            color: white;
+        }
+        h1 {
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            max-width: 800px;
+            height: 200px;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: none;
+            transition: border-color 0.3s;
+        }
+        body.dark textarea {
+            border-color: #555;
+            background-color: #444;
+            color: white;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        button:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+        h2 {
+            margin-top: 20px;
+            color: #333;
+        }
+        iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: white;
+        }
+        body.dark iframe {
+            border-color: #555;
+            background-color: #444;
+        }
+        .toggle-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            transition: transform 0.2s;
+            color: black; /* Default icon color */
+        }
+        body.dark .toggle-button {
+            color: white; /* Icon color in dark mode */
+        }
+        .toggle-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Online HTML Viewer</h1>
+    <p>Enter your HTML code below:</p>
+    <textarea id="htmlInput" placeholder="Write your HTML code here..."></textarea><br>
+    <button onclick="updateOutput()">View Output</button>
+    <button onclick="pasteFromClipboard()">Paste from Clipboard</button>
+
+    <h2>Output:</h2>
+    <iframe id="outputFrame"></iframe>
+
+    <button class="toggle-button" onclick="toggleDarkMode()">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <script>
+        function updateOutput() {
+            const htmlCode = document.getElementById('htmlInput').value;
+            const outputFrame = document.getElementById('outputFrame');
+            const outputDocument = outputFrame.contentDocument || outputFrame.contentWindow.document;
+            outputDocument.open();
+            outputDocument.write(htmlCode);
+            outputDocument.close();
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const icon = document.querySelector('.toggle-button i');
+            icon.classList.toggle('fa-sun');
+            icon.classList.toggle('fa-moon');
+        }
+      function pasteFromClipboard() {
+            navigator.clipboard.readText()
+                .then(text => {
+                    document.getElementById('htmlInput').value = text;
+                    updateOutput(); // Update output after pasting
+                })
+                .catch(err => {
+                    alert("Failed to read clipboard contents: " + err);
+                });
+        }
+    </script>
+
+</body>
+</html>
